@@ -6,7 +6,6 @@ class CustomNavigationBar extends StatelessWidget {
   final VoidCallback? onAboutPressed;
   final VoidCallback? onProcessPressed;
   final VoidCallback? onPortfolioPressed;
-  // final VoidCallback? onServicesPressed; // REMOVED
   final VoidCallback? onContactPressed;
 
   const CustomNavigationBar({
@@ -15,17 +14,19 @@ class CustomNavigationBar extends StatelessWidget {
     this.onAboutPressed,
     this.onProcessPressed,
     this.onPortfolioPressed,
-    // this.onServicesPressed, // REMOVED
     this.onContactPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bool isMobile = MediaQuery.of(context).size.width < 800;
+    final bool isSmallMobile = MediaQuery.of(context).size.width < 500;
+
     return Container(
-      height: 80,
-      padding: EdgeInsets.symmetric(horizontal: 80),
+      height: isMobile ? 70 : 80,
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 24 : 80),
       decoration: BoxDecoration(
-        color: Colors.white,  // ✅ Moved color inside decoration
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -34,110 +35,186 @@ class CustomNavigationBar extends StatelessWidget {
           ),
         ],
       ),
+      child: isMobile ? _buildMobileNav(isSmallMobile) : _buildDesktopNav(),
+    );
+  }
+
+  Widget _buildDesktopNav() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Logo Section
+        _buildLogo(),
+        // Navigation Menu
+        Row(
+          children: [
+            _NavItem('Home', onHomePressed, isActive: true),
+            _NavItem('About', onAboutPressed),
+            _NavItem('Process', onProcessPressed),
+            _NavItem('Portfolio', onPortfolioPressed),
+            _buildContactButton(),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMobileNav(bool isSmallMobile) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _buildLogo(),
+        _buildMobileMenuButton(isSmallMobile),
+      ],
+    );
+  }
+
+  Widget _buildLogo() {
+    return GestureDetector(
+      onTap: onHomePressed,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Logo Section
-          GestureDetector(
-            onTap: onHomePressed,
-            child: Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Color(0xFF8B5CF6),
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFF8B5CF6).withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      'F',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 12),
-                Text(
-                  'Faizan',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937),
-                  ),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Color(0xFF8B5CF6),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFF8B5CF6).withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
-          ),
-
-          // Navigation Menu
-          Row(
-            children: [
-              _NavItem('Home', onHomePressed, isActive: true),
-              _NavItem('About', onAboutPressed),
-              _NavItem('Process', onProcessPressed),
-              _NavItem('Portfolio', onPortfolioPressed),
-              // _NavItem('Services', onServicesPressed), // REMOVED
-
-              // Contact Button
-              GestureDetector(
-                onTap: onContactPressed,
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: Container(
-                    margin: EdgeInsets.only(left: 20),
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF8B5CF6),
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFF8B5CF6).withOpacity(0.3),
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Contact',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Icon(
-                          Icons.mail_outline,
-                          color: Colors.white,
-                          size: 18,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+            child: Center(
+              child: Text(
+                'F',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               ),
-            ],
+            ),
+          ),
+          SizedBox(width: 8),
+          Text(
+            'Faizan',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1F2937)),
           ),
         ],
       ),
     );
   }
 
-  Widget _NavItem(String text, VoidCallback? onPressed, {bool isActive = false}) {
+  Widget _buildContactButton() {
+    return GestureDetector(
+      onTap: onContactPressed,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          margin: EdgeInsets.only(left: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          decoration: BoxDecoration(
+            color: Color(0xFF8B5CF6),
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFF8B5CF6).withOpacity(0.3),
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+            const Text(
+            'Contact',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w500),
+          ),
+          SizedBox(width: 6),
+          const Icon(
+              Icons.mail_outline,
+              color: Colors.white,
+              size: 16),
+        ],
+      ),
+    ),
+    ),
+    );
+  }
+
+  Widget _buildMobileMenuButton(bool isSmallMobile) {
+    return PopupMenuButton<String>(
+      icon: Icon(Icons.menu, color: Color(0xFF1F2937)),
+      onSelected: (value) {
+        switch (value) {
+          case 'Home':
+            onHomePressed?.call();
+            break;
+          case 'About':
+            onAboutPressed?.call();
+            break;
+          case 'Process':
+            onProcessPressed?.call();
+            break;
+          case 'Portfolio':
+            onPortfolioPressed?.call();
+            break;
+          case 'Contact':
+            onContactPressed?.call();
+            break;
+        }
+      },
+      itemBuilder: (BuildContext context) => [
+        PopupMenuItem(
+          value: 'Home',
+          child: Text('Home'),
+        ),
+        PopupMenuItem(
+          value: 'About',
+          child: Text('About'),
+        ),
+        PopupMenuItem(
+          value: 'Process',
+          child: Text('Process'),
+        ),
+        PopupMenuItem(
+          value: 'Portfolio',
+          child: Text('Portfolio'),
+        ),
+        PopupMenuItem(
+          value: 'Contact',
+          child: Row(
+            children: [
+              Text('Contact'),
+              SizedBox(width: 8),
+              Icon(Icons.mail_outline, size: 16),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NavItem extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  final bool isActive;
+
+  const _NavItem(this.text, this.onPressed, {this.isActive = false});
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         print("$text navigation clicked!");
@@ -146,7 +223,7 @@ class CustomNavigationBar extends StatelessWidget {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Container(
-          margin: EdgeInsets.only(right: 32),
+          margin: EdgeInsets.only(right: 24),
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
           decoration: BoxDecoration(
             border: isActive
@@ -156,10 +233,9 @@ class CustomNavigationBar extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 16,
-              color: isActive ? Color(0xFF8B5CF6) : Color(0xFF6B7280),
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-            ),
+                fontSize: 14,
+                color: isActive ? Color(0xFF8B5CF6) : Color(0xFF6B7280),
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.w500),
           ),
         ),
       ),

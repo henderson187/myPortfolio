@@ -4,140 +4,225 @@ import 'package:flutter/material.dart';
 class WorkProcessSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 80, vertical: 100),
-      color: Color(0xFFF9FAFB),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'My Work Process',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F2937),
-                  ),
-                ),
-                SizedBox(height: 24),
-                Text(
-                  'I follow a systematic approach to deliver high-quality mobile applications\nand cloud solutions. My process ensures efficient development cycles,\nrobust testing, and seamless deployment workflows.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF6B7280),
-                    height: 1.6,
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'From initial concept to final deployment, I leverage modern development\ntools and AI-assisted coding to accelerate delivery while maintaining\ncode quality and system reliability.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF6B7280),
-                    height: 1.6,
-                  ),
-                ),
-                SizedBox(height: 32),
+    final bool isMobile = MediaQuery.of(context).size.width < 800;
 
-                // Process highlights
-                Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF8B5CF6).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Color(0xFF8B5CF6).withOpacity(0.2),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.auto_awesome,
-                            color: Color(0xFF8B5CF6),
-                            size: 20,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Process Highlights',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xFF8B5CF6),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 12),
-                      Text(
-                        '• AI-assisted development with Claude & ChatGPT\n• Agile methodology with 2-week sprints\n• Continuous Integration/Continuous Deployment\n• Automated testing and quality assurance',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF1F2937),
-                          height: 1.4,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 20 : 80,
+        vertical: isMobile ? 60 : 100,
+      ),
+      color: Color(0xFFF9FAFB),
+      child: isMobile ? _buildMobileLayout() : _buildDesktopLayout(),
+    );
+  }
+
+  Widget _buildDesktopLayout() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 1,
+          child: _buildProcessDescription(),
+        ),
+        SizedBox(width: 80),
+        Expanded(
+          flex: 1,
+          child: _buildProcessCards(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMobileLayout() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildProcessDescription(),
+        SizedBox(height: 40),
+        _buildProcessCards(),
+      ],
+    );
+  }
+
+  Widget _buildProcessDescription() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'My Work Process',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F2937),
+          ),
+        ),
+        SizedBox(height: 20),
+        Text(
+          'I follow a systematic approach to deliver high-quality mobile applications and cloud solutions. My process ensures efficient development cycles, robust testing, and seamless deployment workflows.',
+          style: TextStyle(
+            fontSize: 16,
+            color: Color(0xFF6B7280),
+            height: 1.6,
+          ),
+        ),
+        SizedBox(height: 16),
+        Text(
+          'From initial concept to final deployment, I leverage modern development tools and AI-assisted coding to accelerate delivery while maintaining code quality and system reliability.',
+          style: TextStyle(
+            fontSize: 16,
+            color: Color(0xFF6B7280),
+            height: 1.6,
+          ),
+        ),
+        SizedBox(height: 32),
+        // Process highlights
+        Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Color(0xFF8B5CF6).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Color(0xFF8B5CF6).withOpacity(0.2),
             ),
           ),
-          SizedBox(width: 80),
-          Expanded(
-            flex: 1,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: _ProcessCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.auto_awesome,
+                    color: Color(0xFF8B5CF6),
+                    size: 20,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    'Process Highlights',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF8B5CF6),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12),
+              Text(
+                '• AI-assisted development with Claude & ChatGPT\n• Agile methodology with 2-week sprints\n• Continuous Integration/Continuous Deployment\n• Automated testing and quality assurance',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF1F2937),
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProcessCards() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool isNarrow = constraints.maxWidth < 500;
+
+        if (isNarrow) {
+          return Column(
+            children: [
+              _ProcessCard(
+                '1',
+                'Requirements & Planning',
+                Icons.assignment,
+                'Analyze requirements, define scope, and create detailed project roadmap with timeline estimates.',
+              ),
+              SizedBox(height: 20),
+              _ProcessCard(
+                '2',
+                'Design & Architecture',
+                Icons.architecture,
+                'Create system architecture, UI/UX designs, and establish development environment setup.',
+              ),
+              SizedBox(height: 20),
+              _ProcessCard(
+                '3',
+                'Development & Testing',
+                Icons.code,
+                'Build features using modern frameworks, implement automated testing, and ensure code quality.',
+              ),
+              SizedBox(height: 20),
+              _ProcessCard(
+                '4',
+                'Deploy & Maintain',
+                Icons.cloud_upload,
+                'Deploy to production using CI/CD pipelines, monitor performance, and provide ongoing support.',
+              ),
+            ],
+          );
+        } else {
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: _ProcessCard(
                       '1',
                       'Requirements & Planning',
                       Icons.assignment,
                       'Analyze requirements, define scope, and create detailed project roadmap with timeline estimates.',
-                    )),
-                    SizedBox(width: 20),
-                    Expanded(child: _ProcessCard(
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: _ProcessCard(
                       '2',
                       'Design & Architecture',
                       Icons.architecture,
                       'Create system architecture, UI/UX designs, and establish development environment setup.',
-                    )),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(child: _ProcessCard(
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: _ProcessCard(
                       '3',
                       'Development & Testing',
                       Icons.code,
                       'Build features using modern frameworks, implement automated testing, and ensure code quality.',
-                    )),
-                    SizedBox(width: 20),
-                    Expanded(child: _ProcessCard(
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: _ProcessCard(
                       '4',
                       'Deploy & Maintain',
                       Icons.cloud_upload,
                       'Deploy to production using CI/CD pipelines, monitor performance, and provide ongoing support.',
-                    )),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }
+      },
     );
   }
+}
 
-  Widget _ProcessCard(String number, String title, IconData icon, String description) {
+class _ProcessCard extends StatelessWidget {
+  final String number;
+  final String title;
+  final IconData icon;
+  final String description;
+
+  const _ProcessCard(this.number, this.title, this.icon, this.description);
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         print("Process step $number: $title clicked!");
@@ -146,7 +231,7 @@ class WorkProcessSection extends StatelessWidget {
         cursor: SystemMouseCursors.click,
         child: AnimatedContainer(
           duration: Duration(milliseconds: 200),
-          padding: EdgeInsets.all(24),
+          padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
@@ -221,7 +306,6 @@ class WorkProcessSection extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               SizedBox(height: 12),
-
               // Process duration indicator
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
